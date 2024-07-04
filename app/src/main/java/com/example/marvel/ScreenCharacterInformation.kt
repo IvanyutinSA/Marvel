@@ -95,18 +95,53 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MarvelTheme {
-                Marvel()
-            }
+@Composable
+fun ScreenCharacterInformationNoScuffs(env: Env, navController: NavHostController, characterId: Int) {
+    val character = env.characters[characterId]
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .paint(
+                painter = character.painter,
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+            )
+    ) {
+        IconButton(
+            onClick = { navController.navigateUp() },
+            modifier = Modifier
+                .padding(top=12.dp)
+                .clip(shape = CircleShape)
+                .background(color = Color.White.copy(alpha = .4f))
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "dsf",
+            )
+        }
+        Column(
+        ) {
+            Spacer(Modifier.fillMaxHeight(.4f))
+
+            var scrollState = rememberScrollState()
+            Text(
+                text =
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontSize = 32.sp)) {
+                        append(character.name)
+                    }
+                    withStyle(style = SpanStyle(fontSize = 16.sp)) {
+                        append("\n\n")
+                        append(character.description)
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentHeight(Alignment.Bottom)
+                    .verticalScroll(state = scrollState)
+                    .background(Color.White.copy(alpha = .8f)),
+                color = Color.Black,
+            )
         }
     }
 }
-
-
-
-
