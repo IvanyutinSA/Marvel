@@ -11,8 +11,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.gestures.snapping.SnapFlingBehavior
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,8 +35,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -290,8 +296,10 @@ fun ScreenCharacterInformationNoScuffs(env: Env, navController: NavHostControlle
                 contentDescription = "dsf",
             )
         }
-        Column() {
+        Column(
+        ) {
             Spacer(Modifier.fillMaxHeight(.4f))
+            var scrollState = rememberScrollState()
             Text(
                 text =
                     buildAnnotatedString {
@@ -304,8 +312,9 @@ fun ScreenCharacterInformationNoScuffs(env: Env, navController: NavHostControlle
                         }
                     },
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .fillMaxSize()
                     .wrapContentHeight(Alignment.Bottom)
+                    .verticalScroll(state = scrollState)
                     .background(Color.Black.copy(alpha=.8f)),
                 color = Color.White,
             )
