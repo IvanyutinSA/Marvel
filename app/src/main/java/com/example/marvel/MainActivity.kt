@@ -63,6 +63,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.HorizontalAlignmentLine
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
@@ -80,6 +81,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.marvel.ui.theme.MarvelTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -113,6 +117,14 @@ data class Env(
 
 @Composable
 fun InitCharacters(env: Env) {
+    var x = rememberAsyncImagePainter(
+        ImageRequest
+            .Builder(LocalContext.current)
+            .data("https://i.postimg.cc/W1Nkbxb2/rei.jpg")
+            .build(),
+        placeholder = painterResource(id = R.drawable.asuka),
+        error = painterResource(id = R.drawable.rei),
+    )
     env.characters = arrayOf(
         Character(
             name = "Langley Asuka",
@@ -129,7 +141,13 @@ fun InitCharacters(env: Env) {
             name = "Misato",
             painter=  painterResource(id = R.drawable.misato),
             backgroundColor = Color.Red,
-        )
+        ),
+//        Character(
+//            name = "Spider Man",
+//            painter = x,
+//            backgroundColor = Color.LightGray,
+//            description = "SPIDAR MAN"
+//        ),
     )
 }
 
@@ -283,7 +301,7 @@ fun ScreenCharacterInformationNoScuffs(env: Env, navController: NavHostControlle
             .fillMaxSize()
             .paint(
                 painter = character.painter,
-                contentScale = ContentScale.Crop ,
+                contentScale = ContentScale.Crop,
                 alignment = Alignment.Center,
             )
     ) {
@@ -315,7 +333,7 @@ fun ScreenCharacterInformationNoScuffs(env: Env, navController: NavHostControlle
                     .fillMaxSize()
                     .wrapContentHeight(Alignment.Bottom)
                     .verticalScroll(state = scrollState)
-                    .background(Color.Black.copy(alpha=.8f)),
+                    .background(Color.Black.copy(alpha = .8f)),
                 color = Color.White,
             )
         }
