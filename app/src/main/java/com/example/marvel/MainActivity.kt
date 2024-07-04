@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,7 +59,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontSynthesis.Companion.Style
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
@@ -109,6 +112,7 @@ fun InitCharacters(env: Env) {
             name = "Langley Asuka",
             painter = painterResource(id = R.drawable.asuka),
             backgroundColor = Color.LightGray,
+            description = "is a 14-year-old fictional character from the Neon Genesis Evangelion franchise and one of the main female characters. Asuka is designated as the Second Child (\"Second Children\" in the original Japanese versions) of the Evangelion Project and pilots the Evangelion Unit-02. Her surname is romanized as Soryu in the English manga and Sohryu in the English version of the TV series, the English version of the film, and on GAINAXs website."
         ),
         Character(
             name = "Ayanami Rei",
@@ -148,7 +152,6 @@ fun HereNavigation() {
         ) { stackEntry ->
             var characterId = stackEntry.arguments?.getInt("character_id")
             if (characterId != null) {
-//                ScreenCharacterInformation(env = env, navController = navController, characterId = characterId)
                 ScreenCharacterInformationNoScuffs(env = env, navController = navController, characterId = characterId)
             }
             else {
@@ -210,7 +213,7 @@ fun ScreenCharacters(
             modifier = textModifier
                 .padding(top=12.dp),
             textAlign = TextAlign.Center,
-            fontSize = 48.sp,
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
         )
 
@@ -218,7 +221,6 @@ fun ScreenCharacters(
 
         LazyRow(
             modifier = modifier
-                .fillMaxSize()
                 .padding(start = 24.dp, bottom = 48.dp, end = 24.dp, top = 48.dp),
             horizontalArrangement = Arrangement.spacedBy(24.dp),
             state = lazyListState,
@@ -227,10 +229,10 @@ fun ScreenCharacters(
             items(env.characters.size) { index ->
                 Box(
                     modifier = modifier
+                        .aspectRatio(360f / 800f)
+//                        .fillMaxHeight()
                         .border(4.dp, Color.Black)
-                        .size(360.dp, 800.dp)
-//                        .padding(start = 24.dp, end = 24.dp)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
+//                        .wrapContentWidth(Alignment.CenterHorizontally)
                         .background(Color.White)
                         .clickable(onClick = { navController.navigate("/characters/$index") })
                 ) {
@@ -243,7 +245,7 @@ fun ScreenCharacters(
                     )
                     Text(
                         buildAnnotatedString {
-                            withStyle(style = ParagraphStyle(lineHeight = 64.sp)) {
+                            withStyle(style = ParagraphStyle(lineHeight = 32.sp)) {
                                 append(character.name)
                             }
                         },
@@ -252,12 +254,12 @@ fun ScreenCharacters(
                             .padding(
                                 bottom = 20.dp,
                                 start = 12.dp,
-                                end = 120.dp,
+                                end = 24.dp,
                             )
                             .wrapContentHeight(Alignment.Bottom),
                         textAlign = TextAlign.Left,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 48.sp,
+                        fontSize = 32.sp,
                     )
                 }
 
@@ -269,20 +271,43 @@ fun ScreenCharacters(
 
 @Composable
 fun ScreenCharacterInformationNoScuffs(env: Env, navController: NavHostController, characterId: Int) {
+    val character = env.characters[characterId]
     Box(
         modifier = Modifier
             .fillMaxSize()
             .paint(
-                painter = env.characters[characterId].painter,
-                contentScale = ContentScale.Crop,
+                painter = character.painter,
+                contentScale = ContentScale.Crop ,
+                alignment = Alignment.Center,
             )
     ) {
         IconButton(
-            onClick = { navController.navigateUp() }
+            onClick = { navController.navigateUp() },
+            modifier = Modifier.padding(top=12.dp)
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "dsf",
+            )
+        }
+        Column() {
+            Spacer(Modifier.fillMaxHeight(.4f))
+            Text(
+                text =
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontSize = 32.sp)) {
+                            append(character.name)
+                        }
+                        withStyle(style = SpanStyle(fontSize = 16.sp)) {
+                            append("\n\n")
+                            append(character.description)
+                        }
+                    },
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .wrapContentHeight(Alignment.Bottom)
+                    .background(Color.Black.copy(alpha=.8f)),
+                color = Color.White,
             )
         }
     }
