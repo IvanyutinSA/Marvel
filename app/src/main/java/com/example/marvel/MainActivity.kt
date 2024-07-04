@@ -353,3 +353,4 @@ fun ScreenCharacterInformationNoScuffs(env: Env, navController: NavHostControlle
         }
     }
 }
+
