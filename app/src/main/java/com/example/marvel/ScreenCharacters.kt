@@ -48,7 +48,6 @@ fun ScreenCharacters(
 ) {
 
     val lazyListState = rememberLazyListState()
-    var characterColor by remember { mutableStateOf(Color.Red) }
 
     val textModifier = modifier
         .fillMaxWidth();
@@ -67,7 +66,6 @@ fun ScreenCharacters(
             .paint(
                 painter = env.backgroundImage,
                 contentScale = ContentScale.FillBounds,
-//                colorFilter = ColorFilter.tint(characterColor),
             ),
     )
     {
@@ -102,12 +100,10 @@ fun ScreenCharacters(
             LazyRow(
                 modifier = modifier
                     .padding(bottom = 48.dp, top = 48.dp),
-//            horizontalArrangement = Arrangement.spacedBy(24.dp),
                 state = lazyListState,
                 flingBehavior = snapFlip,
             ) {
                 items(env.characters.size) { index ->
-                    characterColor = Color.Black.copy(alpha = .2f*index)
                     Box(
                         modifier = modifier
                             .padding(start = 16.dp, end = 16.dp)

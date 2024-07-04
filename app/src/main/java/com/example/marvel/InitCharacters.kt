@@ -8,7 +8,6 @@ import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun InitCharacters(env: Env) {
-    var x = rememberAsyncImagePainter(model = "https://i.postimg.cc/W1Nkbxb2/rei.jpg", imageLoader = ImageLoader(context = LocalContext.current))
     env.characters = arrayOf(
         Character(
             name = "Spider Man",
